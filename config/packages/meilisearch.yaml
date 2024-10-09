@@ -1,0 +1,15 @@
+meilisearch:
+    url: '%env(string:MEILISEARCH_LOCAL_URL)%'
+    api_key: '%env(string:MEILISEARCH_API_KEY)%'
+    prefix: '%env(string:MEILISEARCH_PREFIX)%'
+    batchSize: 1
+    indices:
+        - name: posts
+          class: App\Entity\Post
+          enable_serializer_groups: true
+          serializer_groups: ['search']
+          settings:
+              filterableAttributes: ['id', 'title', 'slug', 'author', 'publishedAt']
+
+        - name: users
+          class: App\Entity\User

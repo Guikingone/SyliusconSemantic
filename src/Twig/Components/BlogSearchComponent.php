@@ -12,7 +12,8 @@
 namespace App\Twig\Components;
 
 use App\Entity\Post;
-use App\Repository\PostRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Meilisearch\Bundle\SearchService;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
@@ -42,7 +43,8 @@ final class BlogSearchComponent
     public string $query = '';
 
     public function __construct(
-        private readonly PostRepository $postRepository,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly SearchService $searchService
     ) {
     }
 
@@ -51,6 +53,13 @@ final class BlogSearchComponent
      */
     public function getPosts(): array
     {
-        return $this->postRepository->findBySearchQuery($this->query);
+        return '' === $this->query
+            ? []
+            : $this->searchService->search($this->entityManager, Post::class, $this->query, [
+                'hybrid' => [
+                    'semanticRatio' => 0.9,
+                    'embedder' => 'ollama_mini-lm',
+                ]
+            ]);
     }
 }

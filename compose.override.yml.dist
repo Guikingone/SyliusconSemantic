@@ -1,0 +1,4 @@
+services:
+    meilisearch:
+        ports:
+            - '7700:7700'

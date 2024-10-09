@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -39,23 +40,28 @@ class Post
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
+    #[Groups('search')]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING)]
+    #[Groups('search')]
     #[Assert\NotBlank]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::STRING)]
+    #[Groups('search')]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::STRING)]
     #[Assert\NotBlank(message: 'post.blank_summary')]
     #[Assert\Length(max: 255)]
+    #[Groups('search')]
     private ?string $summary = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank(message: 'post.blank_content')]
     #[Assert\Length(min: 10, minMessage: 'post.too_short_content')]
+    #[Groups('search')]
     private ?string $content = null;
 
     #[ORM\Column]
@@ -63,6 +69,7 @@ class Post
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('search')]
     private ?User $author = null;
 
     /**
@@ -79,6 +86,7 @@ class Post
     #[ORM\JoinTable(name: 'symfony_demo_post_tag')]
     #[ORM\OrderBy(['name' => 'ASC'])]
     #[Assert\Count(max: 4, maxMessage: 'post.too_many_tags')]
+    #[Groups('search')]
     private Collection $tags;
 
     public function __construct()

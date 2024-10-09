@@ -1,0 +1,11 @@
+services:
+    meilisearch:
+        build: .cloud/docker/meilisearch
+        environment:
+            MEILI_MASTER_KEY: "${SEARCH_MASTER_KEY:-7d9b594befb76b801dd850fd21bc9409174cfc2af41ca3ceda5681ba81f9}"
+        volumes:
+            - search-data:/meili_data
+            - .cloud/docker/meilisearch/dumps:/meili_data/dumps
+
+volumes:
+    search-data:

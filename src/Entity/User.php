@@ -16,6 +16,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -41,15 +42,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
+    #[Groups('search')]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING)]
+    #[Groups('search')]
     #[Assert\NotBlank]
     private ?string $fullName = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 50)]
+    #[Groups('search')]
     private ?string $username = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
